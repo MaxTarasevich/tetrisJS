@@ -8,7 +8,15 @@ let timerId
 const width = 20
 let nextRandom = 0
 let score = 0
+let gameFinish = false
 
+const colors = [
+    '#052F5F',
+    '#005377',
+    '#06A77D',
+    '#D5C67A',
+    '#F1A208'
+  ]
 
 //The Tetrominoes
 const lTetromino = [
@@ -80,6 +88,7 @@ const upNextTetrominos = [
 function draw() {
     current.forEach(index => {
         squares[currentPosition + index].classList.add(`tetromino`)
+        squares[currentPosition + index].style.backgroundColor = colors[random]
     })
 }
 
@@ -87,6 +96,7 @@ function draw() {
 function undraw() {
     current.forEach(index => {
         squares[currentPosition + index].classList.remove(`tetromino`)
+        squares[currentPosition + index].style.backgroundColor = ''
     })
 }
 
@@ -207,9 +217,12 @@ function  rotate() {
 function displayShape() {
     displaySquares.forEach(squares => {
         squares.classList.remove(`tetromino`)
+        squares.style.backgroundColor = ''
+        
     })
     upNextTetrominos[nextRandom].forEach( index => {
         displaySquares[displayIndex + index].classList.add(`tetromino`)
+        displaySquares[displayIndex + index].style.backgroundColor = colors[nextRandom]
     })
 }
 
@@ -244,7 +257,8 @@ function gameOver() {
         scoreDisplay.innerHTML = `end`
         clearInterval(timerId)
         timerId = null
-      
+       gameFinish = true
+       document.removeEventListener(`keydown`,control)
     }
 }
 
@@ -254,20 +268,33 @@ function gameOver() {
 
 document.addEventListener(`DOMContentLoaded`, () =>{
 
-document.addEventListener(`keydown`,control)
+
 
 //add functionality to the buttons
 startBtn.addEventListener(`click`, () => {
     if(timerId){
         clearInterval(timerId)
         timerId = null
+    }else if(gameFinish){
+       squares.forEach((el,index)=>{
+           if(index < 400){
+            el.classList.remove(`tetromino`,`taken`)
+            el.style.backgroundColor = ''
+           }
+           gameFinish = false
+           scoreDisplay.innerHTML = `0`
+         
+       })
     }else {
+        document.addEventListener(`keydown`,control)
         setTimeout(()=>{
             draw()
             timerId = setInterval(moveDown, 1000)
             displayShape()
         },500) 
+       
     }
 })
 
+console.log(scoreDisplay.innerHTML)
 })
