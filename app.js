@@ -1,4 +1,4 @@
-document.addEventListener(`DOMContentLoaded`, () =>{
+// variables ************************************************************
 
 const grid = document.querySelector(`.grid`)
 const scoreDisplay = document.querySelector(`#score`)
@@ -56,6 +56,25 @@ let random =Math.floor(Math.random()*theTetrominoes.length)
 let current = theTetrominoes[random][currentRotation]
 
 
+//show up-next tetromino in mini-grid
+
+const displaySquares = document.querySelectorAll(`.mini-grid div`)
+const displayWidth = 4
+let displayIndex = 0
+
+
+// the Tetrominos without rotations
+const upNextTetrominos = [
+    [1, displayWidth+1, displayWidth*2+1, 2], //lTetromino
+    [0, displayWidth, displayWidth+1, displayWidth*2+1], //zTetromino
+    [1, displayWidth, displayWidth+1, displayWidth+2], //tTetromino
+    [0, 1, displayWidth, displayWidth+1], //oTetromino
+    [1, displayWidth+1, displayWidth*2+1, displayWidth*3+1] //iTetromino
+]
+
+
+// Functions*****************************************************
+
 // draw the tetromino
 
 function draw() {
@@ -71,10 +90,6 @@ function undraw() {
     })
 }
 
-//make the tetromino move every second
-
-//timerId = setInterval(moveDown, 1000)
-
 // assign functions to keyCodes
 
 function control(e) {
@@ -88,8 +103,6 @@ if(e.keyCode === 37) {
     moveDown()
 }
 }
-
-document.addEventListener(`keyup`,control)
 
 //move down function
 
@@ -118,7 +131,6 @@ function freeze() {
     }
 }
 
-
 // move left
   
 function moveLeft() {
@@ -134,6 +146,8 @@ function moveLeft() {
     draw()
 }
 
+//move right
+
 function moveRight() {
     undraw()
     const isAtRight = current.some(index => (currentPosition + index) % width === width-1)
@@ -147,7 +161,33 @@ function moveRight() {
     draw()
 }
 
-//rotete the tetromino
+///FIX ROTATION OF TETROMINOS A THE EDGE 
+
+function isAtRight() {
+    return current.some(index=> (currentPosition + index + 1) % width === 0)  
+  }
+  
+  function isAtLeft() {
+    return current.some(index=> (currentPosition + index) % width === 0)
+  }
+  
+  function checkRotatedPosition(P){
+    P = P || currentPosition       //get current position.  Then, check if the piece is near the left side.
+    if ((P+1) % width < 4) {         //add 1 because the position index can be 1 less than where the piece is (with how they are indexed).     
+      if (isAtRight()){            //use actual position to check if it's flipped over to right side
+        currentPosition += 1    //if so, add one to wrap it back around
+        checkRotatedPosition(P) //check again.  Pass position from start, since long block might need to move more.
+        }
+    }
+    else if (P % width > 5) {
+      if (isAtLeft()){
+        currentPosition -= 1
+      checkRotatedPosition(P)
+      }
+    }
+  }
+
+  //rotate the tetromino
 
 function  rotate() {
     undraw()
@@ -158,25 +198,9 @@ function  rotate() {
   }
     
   current = theTetrominoes[random][currentRotation]
-
+  checkRotatedPosition()
     draw()
 }
-
-//show up-next tetromino in mini-grid
-
-const displaySquares = document.querySelectorAll(`.mini-grid div`)
-const displayWidth = 4
-let displayIndex = 0
-
-
-// the Tetrominos without rotations
-const upNextTetrominos = [
-    [1, displayWidth+1, displayWidth*2+1, 2], //lTetromino
-    [0, displayWidth, displayWidth+1, displayWidth*2+1], //zTetromino
-    [1, displayWidth, displayWidth+1, displayWidth+2], //tTetromino
-    [0, 1, displayWidth, displayWidth+1], //oTetromino
-    [1, displayWidth+1, displayWidth*2+1, displayWidth*3+1] //iTetromino
-]
 
 // display the shape in the mini-grid display
 
@@ -189,24 +213,6 @@ function displayShape() {
     })
 }
 
-
-
-//add functionality to the buttons
-startBtn.addEventListener(`click`, () => {
-    if(timerId){
-        clearInterval(timerId)
-        timerId = null
-    }else {
-        setTimeout(()=>{
-            draw()
-            timerId = setInterval(moveDown, 1000)
-            displayShape()
-        },500)
-      
-        //nextRandom = Math.floor(Math.random()* theTetrominoes.length)
-       
-    }
-})
 
 //add score
 function addScore(){
@@ -231,6 +237,8 @@ function addScore(){
     }
 }
 
+//Game Over 
+
 function gameOver() {
     if(current.some(index => squares[currentPosition + index].classList.contains(`taken`))){
         scoreDisplay.innerHTML = `end`
@@ -242,5 +250,24 @@ function gameOver() {
 
 
 
+// Listeners**************************************************
+
+document.addEventListener(`DOMContentLoaded`, () =>{
+
+document.addEventListener(`keydown`,control)
+
+//add functionality to the buttons
+startBtn.addEventListener(`click`, () => {
+    if(timerId){
+        clearInterval(timerId)
+        timerId = null
+    }else {
+        setTimeout(()=>{
+            draw()
+            timerId = setInterval(moveDown, 1000)
+            displayShape()
+        },500) 
+    }
+})
 
 })
