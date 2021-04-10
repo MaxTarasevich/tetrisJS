@@ -5,7 +5,7 @@ const scoreDisplay = document.querySelector(`#score`)
 const startBtn = document.querySelector(`#start-button`)
 let squares = Array.from(document.querySelectorAll(`.grid div`))
 let timerId
-const width = 20
+const width = 14
 let nextRandom = 0
 let score = 0
 let gameFinish = false
@@ -62,7 +62,7 @@ const lTetromino = [
 
   const theTetrominoes = [lTetromino,zTetromino,tTetromino,oTetromino,iTetromino]
 
-let currentPosition = 8
+let currentPosition = 5
 let currentRotation = 0
 
 //randomly select a Tetromino and its first rotation
@@ -235,7 +235,7 @@ function displayShape() {
 
 //add score
 function addScore(){
-    for(let i = 0; i < 399; i+=width) {
+    for(let i = 0; i < 279; i+=width) {
         
         let row = []
         for(let k = 0; k < width; k++){
@@ -248,6 +248,7 @@ function addScore(){
             row.forEach(index => {
                 squares[index].classList.remove(`taken`)
                 squares[index].classList.remove(`tetromino`)
+                squares[index].style.backgroundColor = ''
             })
             const squaresRemoved = squares.splice(i,width)
             squares = squaresRemoved.concat(squares)

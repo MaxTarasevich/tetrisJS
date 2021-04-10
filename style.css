@@ -140,7 +140,7 @@ h1{
   }
 /**************************Grid********************************************/
 .grid{
-    width: 440px;
+    width: 308px;
     height: 440px;
     display: flex;
     flex-wrap: wrap;
@@ -162,7 +162,7 @@ h1{
     border: 1px solid rgba(85, 80, 92,0.2);
     border-radius: 20%;
 }
-.grid div:nth-child(n+401){
+.grid div:nth-child(n+281){
 border: none;
 }
 
