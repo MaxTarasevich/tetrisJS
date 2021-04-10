@@ -12,7 +12,11 @@
 
 <div class="container">
 <h3>Score:<span id="score">0</span></h3>
-<button id="start-button"> <span></span><span></span><span></span><span></span> Start</button>
+<button id="start-button"  class="control pushable">
+     <span class="shadow"></span>
+     <span class="edge"></span>
+     <span id="start-btn-text"  class="front"> Start</span>
+</button>
 <div class="mini-grid">
     <div></div>
     <div></div>
@@ -31,10 +35,26 @@
     <div></div>
     <div></div>
 </div>
-<button id="Rotate">Rotate</button>
-<button id="Left">Left</button>
-<button id="Right">Right</button>
-<button id="Down">Down</button>
+<button class="control pushable" id="Rotate"> 
+  <span class="shadow"></span>
+  <span class="edge"></span>
+  <span class="front">Rotate</span>
+</button>
+<button class="control pushable" id="Left">  
+  <span class="shadow"></span>
+  <span class="edge"></span>
+  <span class="front">Left</span>
+</button>
+<button class="control pushable" id="Right">  
+  <span class="shadow"></span>
+  <span class="edge"></span>
+  <span class="front">Right</span>
+</button>
+<button class="control pushable" id="Down">  
+  <span class="shadow"></span>
+  <span class="edge"></span>
+  <span class="front">Down</span>
+</button>
 </div>
 
     <div class="grid">

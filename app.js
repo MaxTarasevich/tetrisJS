@@ -9,6 +9,12 @@ const width = 20
 let nextRandom = 0
 let score = 0
 let gameFinish = false
+const startTextBtn = document.getElementById(`start-btn-text`)
+
+const Rotate = document.getElementById(`Rotate`)
+const Left = document.getElementById(`Left`)
+const Right = document.getElementById(`Right`)
+const Down = document.getElementById(`Down`)
 
 const colors = [
     '#052F5F',
@@ -258,23 +264,28 @@ function gameOver() {
         clearInterval(timerId)
         timerId = null
        gameFinish = true
+      startTextBtn.innerText = `end game`
        document.removeEventListener(`keydown`,control)
+       Rotate.removeEventListener(`click`, rotate)
+       Left.removeEventListener(`click`,moveLeft)
+       Right.removeEventListener(`click`,moveRight)
+       Down.removeEventListener(`click`,moveDown)
     }
 }
 
-
-
-// Listeners**************************************************
-
-document.addEventListener(`DOMContentLoaded`, () =>{
-
-
-
-//add functionality to the buttons
-startBtn.addEventListener(`click`, () => {
+//Start button events
+function startButtonEvents(){
     if(timerId){
         clearInterval(timerId)
         timerId = null
+        startTextBtn.innerText = `start`
+
+        document.removeEventListener(`keydown`,control)
+        Rotate.removeEventListener(`click`, rotate)
+        Left.removeEventListener(`click`,moveLeft)
+        Right.removeEventListener(`click`,moveRight)
+        Down.removeEventListener(`click`,moveDown)
+
     }else if(gameFinish){
        squares.forEach((el,index)=>{
            if(index < 400){
@@ -283,18 +294,32 @@ startBtn.addEventListener(`click`, () => {
            }
            gameFinish = false
            scoreDisplay.innerHTML = `0`
+           startTextBtn.innerText  = `New Game`
          
        })
     }else {
         document.addEventListener(`keydown`,control)
+        Rotate.addEventListener(`click`, rotate)
+        Left.addEventListener(`click`,moveLeft)
+        Right.addEventListener(`click`,moveRight)
+        Down.addEventListener(`click`,moveDown)
         setTimeout(()=>{
             draw()
             timerId = setInterval(moveDown, 1000)
             displayShape()
         },500) 
-       
+        startTextBtn.innerText = `pause`
     }
-})
+}
 
-console.log(scoreDisplay.innerHTML)
+// Listeners**************************************************
+
+document.addEventListener(`DOMContentLoaded`, () =>{
+
+
+
+//add functionality to the buttons
+startBtn.addEventListener(`click`, startButtonEvents)
+
+
 })
